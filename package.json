@@ -1,6 +1,6 @@
 {
-  "name": "@becomeliminal/nim-chat",
-  "version": "0.1.1",
+  "name": "@liminalcash/nim-chat",
+  "version": "0.1.0",
   "description": "React chat widget for nim SDK backends",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -46,7 +46,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/becomeliminal/nim-chat"
+    "url": "https://github.com/liminalcash/nim-chat"
   },
   "keywords": [
     "nim",
