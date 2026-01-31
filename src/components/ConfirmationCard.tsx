@@ -30,10 +30,10 @@ export function ConfirmationCard({ request, onConfirm, onCancel }: ConfirmationC
   const secondsLeft = Math.ceil(timeLeft / 1000);
 
   return (
-    <div className="bg-nim-white border-2 border-nim-black rounded-lg p-5 shadow-lg">
+    <div className="bg-white border-2 border-nim-black rounded-lg p-5 shadow-lg">
       <div className="flex items-start gap-3">
         {/* Icon */}
-        <div className="flex-shrink-0 w-10 h-10 bg-nim-beige rounded-lg flex items-center justify-center">
+        <div className="flex-shrink-0 w-10 h-10 bg-nim-cream rounded-lg flex items-center justify-center">
           <svg
             width="20"
             height="20"
@@ -41,7 +41,7 @@ export function ConfirmationCard({ request, onConfirm, onCancel }: ConfirmationC
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            className="text-nim-black"
+            className="text-nim-orange"
           >
             <path d="M12 9v4" />
             <path d="M12 17h.01" />
@@ -54,7 +54,7 @@ export function ConfirmationCard({ request, onConfirm, onCancel }: ConfirmationC
           <h4 className="font-display font-medium text-nim-black text-base">
             Confirm Action
           </h4>
-          <p className="text-nim-grey-400 text-xs mt-0.5 font-mono">
+          <p className="text-nim-brown/70 text-xs mt-0.5 font-mono">
             {request.tool}
           </p>
           <p className="text-nim-black font-body text-sm mt-2">
@@ -70,7 +70,7 @@ export function ConfirmationCard({ request, onConfirm, onCancel }: ConfirmationC
               cy="18"
               r="16"
               fill="none"
-              stroke="#ddd"
+              stroke="#F1EDE7"
               strokeWidth="3"
             />
             <circle
@@ -78,7 +78,7 @@ export function ConfirmationCard({ request, onConfirm, onCancel }: ConfirmationC
               cy="18"
               r="16"
               fill="none"
-              stroke="#231f18"
+              stroke="#FF6D00"
               strokeWidth="3"
               strokeLinecap="round"
               strokeDasharray="100"
@@ -96,13 +96,13 @@ export function ConfirmationCard({ request, onConfirm, onCancel }: ConfirmationC
       <div className="flex gap-3 mt-4">
         <button
           onClick={() => onCancel(request.actionId)}
-          className="flex-1 h-10 px-4 bg-nim-beige text-nim-black rounded-lg text-sm font-display font-medium hover:bg-nim-grey-100 transition-colors border border-nim-grey-100"
+          className="flex-1 h-10 px-4 bg-white text-nim-black rounded-lg text-sm font-display font-medium hover:bg-nim-cream transition-colors border-2 border-nim-black"
         >
           Cancel
         </button>
         <button
           onClick={() => onConfirm(request.actionId)}
-          className="flex-1 h-10 px-4 bg-nim-black text-nim-white rounded-lg text-sm font-display font-medium hover:opacity-90 transition-opacity"
+          className="flex-1 h-10 px-4 bg-nim-orange text-white rounded-lg text-sm font-display font-medium hover:opacity-90 transition-opacity"
         >
           Confirm
         </button>
