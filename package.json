@@ -1,6 +1,6 @@
 {
   "name": "@becomeliminal/nim-chat",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React chat widget for nim SDK backends",
   "type": "module",
   "main": "./dist/index.cjs",
