@@ -2,8 +2,9 @@ import React from 'react';
 import { NimChat } from '../src';
 
 function App() {
-  // Get WebSocket URL from environment or default to localhost
+  // Get URLs from environment or default to localhost
   const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8080/ws';
+  const apiUrl = import.meta.env.VITE_API_URL || 'https://api.liminal.cash';
 
   return (
     <div className="demo-content">
@@ -22,6 +23,7 @@ function App() {
 
       <NimChat
         wsUrl={wsUrl}
+        apiUrl={apiUrl}
         title="Nim"
         position="bottom-right"
       />

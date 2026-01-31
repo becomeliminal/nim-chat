@@ -14,8 +14,9 @@ export default {
         },
       },
       fontFamily: {
-        display: ['Marist', 'Georgia', 'serif'],
-        body: ['Helvetica', 'Arial', 'sans-serif'],
+        display: ['ABC Marist', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        body: ['Helvetica Monospaced Pro', 'SF Mono', 'Monaco', 'Courier New', 'monospace'],
+        mono: ['Helvetica Monospaced Pro', 'SF Mono', 'Monaco', 'Courier New', 'monospace'],
       },
       borderRadius: {
         bubble: '16px',

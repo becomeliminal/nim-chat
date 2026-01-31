@@ -44,7 +44,7 @@ export interface ConfirmationRequest {
 }
 
 // Connection state
-export type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'error';
+export type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'reconnecting' | 'error';
 
 // Widget position
 export type WidgetPosition = 'bottom-right' | 'bottom-left';
@@ -52,6 +52,7 @@ export type WidgetPosition = 'bottom-right' | 'bottom-left';
 // NimChat props
 export interface NimChatProps {
   wsUrl: string;
+  apiUrl?: string;
   title?: string;
   position?: WidgetPosition;
   defaultOpen?: boolean;

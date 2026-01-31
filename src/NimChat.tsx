@@ -1,15 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChatPanel } from './components/ChatPanel';
+import { LoginPanel } from './components/LoginPanel';
 import { useNimWebSocket } from './hooks/useNimWebSocket';
+import { getStoredTokens, clearStoredTokens } from './utils/auth';
 import type { NimChatProps } from './types';
 
 export function NimChat({
   wsUrl,
+  apiUrl = 'https://api.liminal.cash',
   title = 'Nim',
   position = 'bottom-right',
   defaultOpen = false,
 }: NimChatProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [jwt, setJwt] = useState<string | null>(null);
+
+  // Check for existing auth on mount
+  useEffect(() => {
+    const tokens = getStoredTokens();
+    if (tokens) {
+      setJwt(tokens.accessToken);
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLoginSuccess = (accessToken: string, userId: string) => {
+    setJwt(accessToken);
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    clearStoredTokens();
+    setJwt(null);
+    setIsAuthenticated(false);
+  };
 
   const {
     messages,
@@ -21,6 +46,7 @@ export function NimChat({
     cancelAction,
   } = useNimWebSocket({
     wsUrl,
+    jwt: isAuthenticated ? jwt : null,
     onError: (error) => console.error('[NimChat]', error),
   });
 
@@ -29,8 +55,23 @@ export function NimChat({
 
   return (
     <div className="nim-chat-widget fixed bottom-4 sm:bottom-6 z-50" style={{ [position === 'bottom-right' ? 'right' : 'left']: '1rem' }}>
+      {/* Login Panel */}
+      {isOpen && !isAuthenticated && (
+        <div
+          className={`
+            absolute bottom-16
+            w-[calc(100vw-2rem)] sm:w-96
+          `}
+          style={{
+            [position === 'bottom-right' ? 'right' : 'left']: 0,
+          }}
+        >
+          <LoginPanel onLoginSuccess={handleLoginSuccess} apiUrl={apiUrl} />
+        </div>
+      )}
+
       {/* Chat Panel */}
-      {isOpen && (
+      {isOpen && isAuthenticated && (
         <div
           className={`
             absolute bottom-16 ${positionClasses}
@@ -51,6 +92,7 @@ export function NimChat({
             onConfirm={confirmAction}
             onCancel={cancelAction}
             onClose={() => setIsOpen(false)}
+            onLogout={handleLogout}
           />
         </div>
       )}

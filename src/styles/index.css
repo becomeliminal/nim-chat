@@ -2,16 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom font face for Marist if available */
+/* ============================================================================
+   LIMINAL BRAND FONTS
+   ============================================================================ */
+
+/* ABC Marist Font Family (Display/Headings) */
 @font-face {
-  font-family: 'Marist';
-  src: local('Marist');
+  font-family: 'ABC Marist';
+  src: url('/fonts/abc-marist/ABCMarist-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 
-/* Nim Chat widget styles */
+@font-face {
+  font-family: 'ABC Marist';
+  src: url('/fonts/abc-marist/ABCMarist-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ABC Marist';
+  src: url('/fonts/abc-marist/ABCMarist-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ABC Marist';
+  src: url('/fonts/abc-marist/ABCMarist-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Helvetica Monospaced Pro Font Family (Body/Monospace) */
+@font-face {
+  font-family: 'Helvetica Monospaced Pro';
+  src: url('/fonts/helvetica-monospaced-pro/HelveticaMonospacedPro-Rg.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helvetica Monospaced Pro';
+  src: url('/fonts/helvetica-monospaced-pro/HelveticaMonospacedPro-Bd.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================================
+   NIM CHAT WIDGET STYLES
+   ============================================================================ */
+
+/* Base widget styles */
 .nim-chat-widget {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Monospaced Pro', 'SF Mono', Monaco, 'Courier New', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -26,12 +77,12 @@
 }
 
 .nim-chat-messages::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background: #b6b6b6;
   border-radius: 3px;
 }
 
 .nim-chat-messages::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: #6b6b6b;
 }
 
 /* Animation for thinking indicator */
@@ -98,14 +149,15 @@
 }
 
 .nim-message-content code {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(35, 31, 24, 0.1);
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   font-size: 0.875em;
+  font-family: 'Helvetica Monospaced Pro', monospace;
 }
 
 .nim-message-content pre {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(35, 31, 24, 0.1);
   padding: 0.75rem;
   border-radius: 0.5rem;
   overflow-x: auto;

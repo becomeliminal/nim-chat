@@ -12,11 +12,11 @@ export function ChatMessage({ message }: ChatMessageProps) {
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div
         className={`
-          max-w-bubble px-4 py-3 rounded-bubble nim-message-content
+          max-w-bubble px-4 py-3 rounded-lg nim-message-content font-body text-sm
           ${
             isUser
               ? 'bg-nim-orange text-white'
-              : 'bg-nim-cream border border-nim-orange text-nim-black'
+              : 'bg-nim-cream text-nim-black'
           }
         `}
       >
@@ -28,7 +28,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
               // Override default components to ensure proper styling
               p: ({ children }) => <p className="whitespace-pre-wrap">{children}</p>,
               a: ({ href, children }) => (
-                <a href={href} target="_blank" rel="noopener noreferrer">
+                <a href={href} target="_blank" rel="noopener noreferrer" className="underline">
                   {children}
                 </a>
               ),

@@ -46,13 +46,13 @@ export function ChatInput({
         placeholder={placeholder}
         className={`
           flex-1 h-11 px-4
-          bg-white border-2 border-nim-orange
-          rounded-full
-          text-nim-black placeholder-nim-brown/50
-          font-body text-base
+          bg-white border-2 border-nim-cream
+          rounded-lg
+          text-nim-black placeholder-nim-brown/40
+          font-body text-sm
           outline-none
           transition-colors duration-200
-          focus:border-nim-blue focus:ring-2 focus:ring-nim-blue/20
+          focus:border-nim-orange
           disabled:opacity-50 disabled:cursor-not-allowed
         `}
       />
@@ -62,12 +62,12 @@ export function ChatInput({
         className={`
           h-11 w-11
           bg-nim-orange text-white
-          rounded-full
+          rounded-lg
           flex items-center justify-center
           transition-all duration-200
-          hover:bg-nim-orange/90 hover:scale-105
+          hover:opacity-90 hover:scale-105
           active:scale-95
-          disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+          disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100
         `}
         aria-label="Send message"
       >
