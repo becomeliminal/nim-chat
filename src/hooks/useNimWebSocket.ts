@@ -25,6 +25,7 @@ interface UseNimWebSocketReturn {
   confirmAction: (actionId: string) => void;
   cancelAction: (actionId: string) => void;
   reconnect: () => void;
+  clearConversation: () => void;
 }
 
 export function useNimWebSocket({
@@ -124,7 +125,7 @@ export function useNimWebSocket({
                   id: `msg-${Date.now()}`,
                   role: 'assistant',
                   content: streamingContentRef.current,
-                  timestamp: Date.now(),
+                  createdAt: new Date().toISOString(),
                 },
               ];
             }
@@ -150,7 +151,7 @@ export function useNimWebSocket({
                 id: `msg-${Date.now()}`,
                 role: 'assistant',
                 content: message.content,
-                timestamp: Date.now(),
+                createdAt: new Date().toISOString(),
               },
             ];
           });
@@ -199,7 +200,7 @@ export function useNimWebSocket({
                 id: `msg-${Date.now()}`,
                 role: 'assistant',
                 content: `Error: ${message.content}`,
-                timestamp: Date.now(),
+                createdAt: new Date().toISOString(),
               },
             ]);
           }
@@ -263,9 +264,10 @@ export function useNimWebSocket({
         id: `msg-${Date.now()}`,
         role: 'user',
         content: content.trim(),
-        timestamp: Date.now(),
+        createdAt: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, userMessage]);
+      setIsStreaming(true);
 
       // Send to server
       send({ type: 'message', content: content.trim() });
@@ -288,6 +290,16 @@ export function useNimWebSocket({
     },
     [send]
   );
+
+  const clearConversation = useCallback(() => {
+    setMessages([]);
+    setIsStreaming(false);
+    setConfirmationRequest(null);
+    streamingContentRef.current = '';
+    localStorage.removeItem(STORAGE_KEY);
+    conversationIdRef.current = null;
+    send({ type: 'new_conversation' });
+  }, [send]);
 
   // Connect when JWT is available
   useEffect(() => {
@@ -359,5 +371,6 @@ export function useNimWebSocket({
     confirmAction,
     cancelAction,
     reconnect,
+    clearConversation,
   };
 }

@@ -7,6 +7,10 @@ export { ChatMessage } from './components/ChatMessage';
 export { ChatInput } from './components/ChatInput';
 export { ConfirmationCard } from './components/ConfirmationCard';
 export { ThinkingIndicator } from './components/ThinkingIndicator';
+export { ChatEmptyState } from './components/ChatEmptyState';
+export { StreamingMessage } from './components/StreamingMessage';
+export { ScrollToBottomButton } from './components/ScrollToBottomButton';
+export { DateSeparator } from './components/DateSeparator';
 
 // Hook for custom implementations
 export { useNimWebSocket } from './hooks/useNimWebSocket';

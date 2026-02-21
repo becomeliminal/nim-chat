@@ -83,7 +83,7 @@ export function LoginPanel({ onLoginSuccess, apiUrl = 'https://api.liminal.cash'
       <div className="flex flex-col gap-4 p-6 bg-white rounded-2xl shadow-xl max-w-md">
         <div>
           <h2 className="font-display text-2xl font-bold text-nim-black">Enter Code</h2>
-          <p className="text-sm text-nim-brown/60 mt-1">
+          <p className="text-sm text-nim-grey mt-1">
             We sent a 6-digit code to {email}
           </p>
         </div>
@@ -118,7 +118,7 @@ export function LoginPanel({ onLoginSuccess, apiUrl = 'https://api.liminal.cash'
             setOtp('');
             setError('');
           }}
-          className="text-sm text-nim-brown/60 hover:text-nim-brown transition-colors"
+          className="text-sm text-nim-grey hover:text-nim-brown transition-colors"
         >
           ← Use different email
         </button>
@@ -130,7 +130,7 @@ export function LoginPanel({ onLoginSuccess, apiUrl = 'https://api.liminal.cash'
     <div className="flex flex-col gap-4 p-6 bg-white rounded-2xl shadow-xl max-w-md">
       <div>
         <h2 className="font-display text-2xl font-bold text-nim-black">Sign In to Nim</h2>
-        <p className="text-sm text-nim-brown/60 mt-1">
+        <p className="text-sm text-nim-grey mt-1">
           Enter your Liminal email to receive a login code
         </p>
       </div>
@@ -158,8 +158,17 @@ export function LoginPanel({ onLoginSuccess, apiUrl = 'https://api.liminal.cash'
         {loading ? 'Sending code...' : 'Send Login Code'}
       </button>
 
-      <p className="text-xs text-nim-brown/40 text-center">
-        Don't have an account? Download the Liminal app to sign up.
+      <p className="text-xs text-nim-grey text-center">
+        Don't have an account?{' '}
+        <a
+          href="https://testflight.apple.com/join/ZYTDH2bd"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-nim-orange underline underline-offset-2 hover:opacity-80"
+        >
+          Download the Liminal app
+        </a>{' '}
+        to sign up.
       </p>
     </div>
   );

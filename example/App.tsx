@@ -3,7 +3,7 @@ import { NimChat } from '../src';
 
 function App() {
   // Get URLs from environment or default to localhost
-  const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8080/ws';
+  const wsUrl = import.meta.env.VITE_WS_URL || 'wss://api.liminal.cash/nim';
   const apiUrl = import.meta.env.VITE_API_URL || 'https://api.liminal.cash';
 
   return (

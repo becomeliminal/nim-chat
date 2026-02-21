@@ -11,6 +11,9 @@ export default {
           black: '#231F18',
           brown: '#492610',
           green: '#188A31',
+          grey: '#736C64',
+          beige: '#9E8C78',
+          'light-beige': '#ABA89F',
         },
       },
       fontFamily: {
@@ -23,6 +26,9 @@ export default {
       },
       maxWidth: {
         bubble: '85%',
+      },
+      letterSpacing: {
+        wide: '0.6px',
       },
     },
   },

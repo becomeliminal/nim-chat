@@ -1,10 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { ConfirmationRequest } from '../types';
 
 interface ConfirmationCardProps {
   request: ConfirmationRequest;
   onConfirm: (actionId: string) => void;
   onCancel: (actionId: string) => void;
+}
+
+interface ParsedDetails {
+  recipient?: string;
+  amount?: string;
+  currency?: string;
+  note?: string;
+  vault?: string;
+}
+
+function getActionTitle(tool: string): string {
+  switch (tool) {
+    case 'send_money':
+      return 'Confirm Transfer';
+    case 'deposit_savings':
+      return 'Confirm Deposit';
+    case 'withdraw_savings':
+      return 'Confirm Withdrawal';
+    default:
+      return 'Confirm Action';
+  }
+}
+
+function parseDetails(summary: string): ParsedDetails | null {
+  const details: ParsedDetails = {};
+  const amountMatch = summary.match(/\$[\d,.]+|\d+\.?\d*\s*(?:USD|EUR|GBP)/i);
+  if (amountMatch) details.amount = amountMatch[0];
+  const toMatch = summary.match(/(?:to|recipient:?)\s+([^\s,]+)/i);
+  if (toMatch) details.recipient = toMatch[1];
+  return Object.keys(details).length > 0 ? details : null;
+}
+
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between items-center py-1.5">
+      <span className="text-xs font-body text-nim-grey">{label}</span>
+      <span className="text-sm font-display font-medium text-nim-black">{value}</span>
+    </div>
+  );
 }
 
 export function ConfirmationCard({ request, onConfirm, onCancel }: ConfirmationCardProps) {
@@ -21,88 +60,55 @@ export function ConfirmationCard({ request, onConfirm, onCancel }: ConfirmationC
     };
 
     updateTimeLeft();
-    const interval = setInterval(updateTimeLeft, 100);
+    const interval = setInterval(updateTimeLeft, 1000);
     return () => clearInterval(interval);
   }, [request.expiresAt, request.actionId, onCancel]);
 
-  const totalDuration = request.expiresAt.getTime() - Date.now() + timeLeft;
-  const progress = totalDuration > 0 ? (timeLeft / totalDuration) * 100 : 0;
-  const secondsLeft = Math.ceil(timeLeft / 1000);
+  const minutes = Math.floor(timeLeft / 60000);
+  const seconds = Math.floor((timeLeft % 60000) / 1000);
+  const isExpiringSoon = minutes < 1;
+
+  const details = useMemo(() => parseDetails(request.summary), [request.summary]);
 
   return (
-    <div className="bg-white border-2 border-nim-black rounded-lg p-5 shadow-lg">
-      <div className="flex items-start gap-3">
-        {/* Icon */}
-        <div className="flex-shrink-0 w-10 h-10 bg-nim-cream rounded-lg flex items-center justify-center">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-nim-orange"
-          >
-            <path d="M12 9v4" />
-            <path d="M12 17h.01" />
-            <path d="M3.6 15.8l4.8-9.6a2 2 0 0 1 3.6 0l4.8 9.6a2 2 0 0 1-1.8 2.8H5.4a2 2 0 0 1-1.8-2.8z" />
-          </svg>
-        </div>
+    <div className="nim-message-enter bg-white border border-nim-beige/30 rounded-[24px] p-4 shadow-sm mx-4">
+      <h4 className="font-display font-semibold text-nim-black text-lg">
+        {getActionTitle(request.tool)}
+      </h4>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <h4 className="font-display font-medium text-nim-black text-base">
-            Confirm Action
-          </h4>
-          <p className="text-nim-brown/70 text-xs mt-0.5 font-mono">
-            {request.tool}
-          </p>
-          <p className="text-nim-black font-body text-sm mt-2">
+      <div className="my-1">
+        {details ? (
+          <div className="divide-y divide-nim-cream">
+            {details.recipient && <DetailRow label="To" value={details.recipient} />}
+            {details.amount && <DetailRow label="Amount" value={details.amount} />}
+            {details.note && <DetailRow label="Note" value={details.note} />}
+            {details.vault && <DetailRow label="Vault" value={details.vault} />}
+          </div>
+        ) : (
+          <p className="text-sm font-display text-nim-black leading-relaxed">
             {request.summary}
           </p>
-        </div>
-
-        {/* Countdown */}
-        <div className="flex-shrink-0 relative w-10 h-10">
-          <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
-            <circle
-              cx="18"
-              cy="18"
-              r="16"
-              fill="none"
-              stroke="#F1EDE7"
-              strokeWidth="3"
-            />
-            <circle
-              cx="18"
-              cy="18"
-              r="16"
-              fill="none"
-              stroke="#FF6D00"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeDasharray="100"
-              strokeDashoffset={100 - progress}
-              className="transition-all duration-100"
-            />
-          </svg>
-          <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-nim-black font-mono">
-            {secondsLeft}
-          </span>
-        </div>
+        )}
       </div>
 
-      {/* Actions */}
-      <div className="flex gap-3 mt-4">
+      <p
+        className={`text-xs font-body ${
+          isExpiringSoon ? 'text-nim-orange' : 'text-nim-grey'
+        }`}
+      >
+        Expires in {minutes}:{seconds.toString().padStart(2, '0')}
+      </p>
+
+      <div className="flex justify-end gap-2 mt-1">
         <button
           onClick={() => onCancel(request.actionId)}
-          className="flex-1 h-10 px-4 bg-white text-nim-black rounded-lg text-sm font-display font-medium hover:bg-nim-cream transition-colors border-2 border-nim-black"
+          className="h-9 px-3 text-sm font-body uppercase tracking-[0.5px] border border-nim-orange text-nim-orange hover:bg-nim-cream rounded-2xl transition-colors"
         >
           Cancel
         </button>
         <button
           onClick={() => onConfirm(request.actionId)}
-          className="flex-1 h-10 px-4 bg-nim-orange text-white rounded-lg text-sm font-display font-medium hover:opacity-90 transition-opacity"
+          className="h-9 px-3 text-sm font-body uppercase tracking-[0.5px] text-nim-black bg-nim-orange rounded-2xl hover:opacity-90 transition-opacity"
         >
           Confirm
         </button>

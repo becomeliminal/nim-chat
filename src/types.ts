@@ -3,7 +3,7 @@ export interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
-  timestamp: number;
+  createdAt: string;
 }
 
 // WebSocket protocol - Client → Server

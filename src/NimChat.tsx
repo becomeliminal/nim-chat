@@ -13,6 +13,7 @@ export function NimChat({
   defaultOpen = false,
 }: NimChatProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [jwt, setJwt] = useState<string | null>(null);
 
@@ -25,7 +26,7 @@ export function NimChat({
     }
   }, []);
 
-  const handleLoginSuccess = (accessToken: string, userId: string) => {
+  const handleLoginSuccess = (accessToken: string, _userId: string) => {
     setJwt(accessToken);
     setIsAuthenticated(true);
   };
@@ -44,27 +45,22 @@ export function NimChat({
     sendMessage,
     confirmAction,
     cancelAction,
+    clearConversation,
   } = useNimWebSocket({
     wsUrl,
     jwt: isAuthenticated ? jwt : null,
     onError: (error) => console.error('[NimChat]', error),
   });
 
-  const positionClasses =
-    position === 'bottom-right' ? 'right-4 sm:right-6' : 'left-4 sm:left-6';
+  const positionSide = position === 'bottom-right' ? 'right' : 'left';
 
   return (
-    <div className="nim-chat-widget fixed bottom-4 sm:bottom-6 z-50" style={{ [position === 'bottom-right' ? 'right' : 'left']: '1rem' }}>
+    <div className="nim-chat-widget fixed bottom-4 sm:bottom-6 z-50" style={{ [positionSide]: '1rem' }}>
       {/* Login Panel */}
       {isOpen && !isAuthenticated && (
         <div
-          className={`
-            absolute bottom-16
-            w-[calc(100vw-2rem)] sm:w-96
-          `}
-          style={{
-            [position === 'bottom-right' ? 'right' : 'left']: 0,
-          }}
+          className="absolute bottom-16 w-[calc(100vw-2rem)] sm:w-96"
+          style={{ [positionSide]: 0 }}
         >
           <LoginPanel onLoginSuccess={handleLoginSuccess} apiUrl={apiUrl} />
         </div>
@@ -74,13 +70,13 @@ export function NimChat({
       {isOpen && isAuthenticated && (
         <div
           className={`
-            absolute bottom-16 ${positionClasses}
-            w-[calc(100vw-2rem)] sm:w-96
-            h-[min(600px,calc(100vh-8rem))]
+            absolute bottom-16 transition-all duration-300 ease-in-out
+            ${isExpanded
+              ? 'w-[50vw] h-[calc(100vh-6rem)]'
+              : 'w-[calc(100vw-2rem)] sm:w-96 h-[min(600px,calc(100vh-8rem))]'
+            }
           `}
-          style={{
-            [position === 'bottom-right' ? 'right' : 'left']: 0,
-          }}
+          style={{ [positionSide]: 0 }}
         >
           <ChatPanel
             title={title}
@@ -91,15 +87,18 @@ export function NimChat({
             onSendMessage={sendMessage}
             onConfirm={confirmAction}
             onCancel={cancelAction}
-            onClose={() => setIsOpen(false)}
+            onNewChat={clearConversation}
+            onClose={() => { setIsOpen(false); setIsExpanded(false); }}
             onLogout={handleLogout}
+            isExpanded={isExpanded}
+            onToggleExpand={() => setIsExpanded((prev) => !prev)}
           />
         </div>
       )}
 
       {/* Floating Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => { setIsOpen(!isOpen); if (isOpen) setIsExpanded(false); }}
         className={`
           w-14 h-14
           bg-nim-orange text-white
@@ -109,7 +108,6 @@ export function NimChat({
           transition-all duration-200
           hover:scale-110 hover:shadow-xl
           active:scale-95
-          ${isOpen ? 'rotate-0' : 'rotate-0'}
         `}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
